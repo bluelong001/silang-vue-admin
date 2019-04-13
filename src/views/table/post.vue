@@ -3,32 +3,15 @@
     <el-row type="flex" justify="end">
       <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="2">
         <div>
-          <el-button @click="centerDialogVisible = true">添加视频</el-button>
+          <el-button @click="centerDialogVisible = true">添加主题</el-button>
 
           <el-dialog title="提示" :visible.sync="centerDialogVisible" width="30%" center>
             <el-form>
-              <el-form-item>
-                <el-upload
-                  class="avatar-uploader"
-                  ref="upload"
-                  :action="upload_url"
-                  list-type="picture-card"
-                  :name="upload_name"
-                  :on-remove="handleRemove"
-                  :on-exceed="handleExceed"
-                  :file-list="ad_url_list"
-                  :limit="1"
-                  :http-request="uploadSectionFile"
-                >
-                  <span class="font-14">选择图片或视频</span>
-                  <div slot="tip" class="el-upload__tip">尺寸750*1125px，大小2M以内，视频支持MP4</div>
-                </el-upload>
-              </el-form-item>
-              <el-form-item label="标题">
+              <el-form-item label="主题标题">
                 <el-input></el-input>
               </el-form-item>
-              <el-form-item label="介绍">
-                <el-input type="textarea"></el-input>
+              <el-form-item label="主题内容">
+                 <el-input type="textarea" ></el-input>
               </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -51,7 +34,7 @@
       <el-table-column align="center" label="ID" width="95">
         <template slot-scope="scope">{{ scope.$index }}</template>
       </el-table-column>
-      <el-table-column label="标题">
+      <el-table-column label="主题标题">
         <template slot-scope="scope">{{ scope.row.title }}</template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="时间" width="200">
@@ -60,22 +43,22 @@
           <span>{{ scope.row.display_time }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="用户名" width="110" align="center">
+      <el-table-column label="用户名" width="200" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.author }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="250" align="center">
-        <template slot-scope="scope">
+         <template slot-scope="scope">
           <span>
              <el-button @click="centerDialog = true">编辑</el-button>
 
           <el-dialog title="提示" :visible.sync="centerDialog" width="30%" center>
             <el-form>
-              <el-form-item label="标题">
+              <el-form-item label="主题标题">
                 <el-input></el-input>
               </el-form-item>
-              <el-form-item label="介绍">
+              <el-form-item label="主题内容">
                 <el-input type="textarea"></el-input>
               </el-form-item>
             </el-form>
@@ -111,7 +94,7 @@ export default {
       list: null,
       listLoading: true,
       centerDialogVisible: false,
-      centerDialog: false
+       centerDialog: false
     };
   },
   created() {
@@ -154,6 +137,7 @@ export default {
   }
 };
 </script>
+
 <style>
 .el-dialog {
     background: #fff;
