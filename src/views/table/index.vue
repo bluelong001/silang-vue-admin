@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import { getList } from "@/api/table";
+import { getList,del } from "@/api/video";
 
 export default {
   filters: {
@@ -103,7 +103,7 @@ export default {
         draft: "gray",
         deleted: "danger"
       };
-      return statusMap[status];
+      return statusMap[status]; 
     }
   },
   data() {
@@ -121,7 +121,7 @@ export default {
     fetchData() {
       this.listLoading = true;
       getList(this.listQuery).then(response => {
-        this.list = response.data.items;
+        this.list = response.data;
         this.listLoading = false;
       });
     },
