@@ -35,7 +35,10 @@
         <template slot-scope="scope">{{ scope.$index }}</template>
       </el-table-column>
       <el-table-column label="用户名">
-        <template slot-scope="scope">{{ scope.row.author }}</template>
+        <template slot-scope="scope">{{ scope.row.username }}</template>
+      </el-table-column>
+            <el-table-column label="显示名">
+        <template slot-scope="scope">{{ scope.row.displayname }}</template>
       </el-table-column>
       <el-table-column label="操作" width="250" align="center">
          <template slot-scope="scope">

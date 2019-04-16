@@ -51,18 +51,24 @@
       <el-table-column align="center" label="ID" width="95">
         <template slot-scope="scope">{{ scope.$index }}</template>
       </el-table-column>
+            <el-table-column align="center" label="视频" width="95">
+        <template slot-scope="scope">
+          <video :src="scope.row.fileUrl" width="100px" height="100px"/>
+        </template>
+      </el-table-column>
       <el-table-column label="标题">
         <template slot-scope="scope">{{ scope.row.title }}</template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="时间" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time"/>
-          <span>{{ scope.row.display_time }}</span>
+          <span>{{ scope.row.gmtCreate }}</span>
         </template>
       </el-table-column>
       <el-table-column label="用户名" width="110" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
+          <span>{{ scope.row.userInfo.displayname }}</span>
+          <img :src="scope.row.userInfo.headIcon" width="40px" height="40px"/>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="250" align="center">

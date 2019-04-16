@@ -40,14 +40,19 @@
       <el-table-column align="center" prop="created_at" label="时间" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time"/>
-          <span>{{ scope.row.display_time }}</span>
+          <span>{{ scope.row.gmtCreate }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="用户名" width="200" align="center">
+      <!-- <el-table-column label="用户名" width="200" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
+          <span>{{ scope.row.userInfo.displayname }}</span>
         </template>
       </el-table-column>
+            <el-table-column label="回复数" width="200" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.userInfo.displayname }}</span>
+        </template>
+      </el-table-column> -->
       <el-table-column label="操作" width="250" align="center">
          <template slot-scope="scope">
           <span>

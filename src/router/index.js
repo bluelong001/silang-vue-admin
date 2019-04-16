@@ -68,12 +68,12 @@ export const constantRouterMap = [
         component: () => import('@/views/table/post'), // Parent router-view
         name: 'Menu1',
         meta: { title: '主题管理' }
-      },
-      {
-        path: 'menu2',
-        component: () => import('@/views/table/reply'),
-        meta: { title: '回复管理' }
       }
+      // {
+      //   path: 'menu2',
+      //   component: () => import('@/views/table/reply'),
+      //   meta: { title: '回复管理' }
+      // }
     ]
   },
   {

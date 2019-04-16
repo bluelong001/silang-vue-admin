@@ -11,21 +11,20 @@
       <el-table-column align="center" label="ID" width="95">
         <template slot-scope="scope">{{ scope.$index }}</template>
       </el-table-column>
-      <el-table-column label="主题标题">
-        <template slot-scope="scope">{{ scope.row.title }}</template>
+      <el-table-column label="主题">
+        <template slot-scope="scope">{{ scope.row.context }}</template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="时间" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time"/>
-          <span>{{ scope.row.display_time }}</span>
+          <span>{{ scope.row.gmtCreate }}</span>
         </template>
       </el-table-column>
-        <el-table-column align="center" prop="created_at" label="回复者" width="150">
+        <!-- <el-table-column align="center" prop="created_at" label="回复者" width="150">
         <template slot-scope="scope">
-          <i class="el-icon-time"/>
-          <span>{{ scope.row.author }}</span>
+          <span>{{ scope.row.userInfo.displayname }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="回复内容" width="300" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.title }}</span>
