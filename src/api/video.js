@@ -8,11 +8,11 @@ export function getList(params) {
   })
 }
 
-export function del(params) {
+export function del(id) {
   return request({
     url: '/video',
     method: 'delete',
-    params
+    params: { id: id }
   })
 }
 
