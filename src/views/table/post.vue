@@ -3,85 +3,112 @@
     <el-row type="flex" justify="end">
       <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="2">
         <div>
-          <el-button @click="centerDialogVisible = true">添加主题</el-button>
-
-          <el-dialog title="提示" :visible.sync="centerDialogVisible" width="30%" center>
+          <el-button @click="addDialogShow">添加主题</el-button>
+          <el-dialog title="预览主题" :visible.sync="showDialogVisible" width="60%" center>
+            <span>
+              <p v-html="content">{{content}}</p>
+            </span>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="showDialogVisible = false">关 闭</el-button>
+            </span>
+          </el-dialog>
+          <!-- modify -->
+          <el-dialog title="提示" :visible.sync="modifyDialogVisible" width="60%" center>
             <el-form>
               <el-form-item label="主题标题">
-                <el-input></el-input>
+                <el-input v-model="form.info.title"></el-input>
               </el-form-item>
-              <el-form-item label="主题内容">
-                 <el-input type="textarea" ></el-input>
-              </el-form-item>
+              <el-form-item label="主题内容"/>
+
+              <quill-editor ref="myQuillEditor" :options="editorOption" v-model="form.info.content"></quill-editor>
             </el-form>
             <span slot="footer" class="dialog-footer">
-              <el-button @click="centerDialogVisible = false">取 消</el-button>
-              <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+              <el-button @click="modifyDialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="modifyItem">保存</el-button>
+            </span>
+          </el-dialog>
+          <!-- add -->
+          <el-dialog title="提示" :visible.sync="addDialogVisible" width="30%" center>
+            <el-form>
+              <el-form-item label="主题标题">
+                <el-input v-model="form.info.title"></el-input>
+              </el-form-item>
+              <el-form-item label="主题内容"/>
+              <quill-editor ref="myQuillEditor" :options="editorOption" v-model="form.info.content"></quill-editor>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="addDialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="addItem">确 定</el-button>
             </span>
           </el-dialog>
         </div>
       </el-col>
     </el-row>
     <br>
-    <el-table
-      v-loading="listLoading"
-      :data="list"
-      element-loading-text="Loading"
-      border
-      fit
-      highlight-current-row
-    >
-      <el-table-column align="center" label="ID" width="95">
-        <template slot-scope="scope">{{ scope.$index }}</template>
-      </el-table-column>
-      <el-table-column label="主题标题">
-        <template slot-scope="scope">{{ scope.row.title }}</template>
-      </el-table-column>
-      <el-table-column align="center" prop="created_at" label="时间" width="200">
-        <template slot-scope="scope">
-          <i class="el-icon-time"/>
-          <span>{{ scope.row.gmtCreate }}</span>
-        </template>
-      </el-table-column>
-      <!-- <el-table-column label="用户名" width="200" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.userInfo.displayname }}</span>
-        </template>
-      </el-table-column>
-            <el-table-column label="回复数" width="200" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.userInfo.displayname }}</span>
-        </template>
-      </el-table-column> -->
-      <el-table-column label="操作" width="250" align="center">
-         <template slot-scope="scope">
-          <span>
-             <el-button @click="centerDialog = true">编辑</el-button>
+    <el-collapse v-model="activeId" accordion>
+      <!-- <div > -->
+      <el-collapse-item
+        align="center"
+        width="95"
+        :title="item.title"
+        v-for="item in list"
+        :name="item.id"
+        :key="item.id"
+      >
+        <div>
+          <span slot="left" class="post-date">{{ item.gmtCreate }}</span>
 
-          <el-dialog title="提示" :visible.sync="centerDialog" width="30%" center>
-            <el-form>
-              <el-form-item label="主题标题">
-                <el-input></el-input>
-              </el-form-item>
-              <el-form-item label="主题内容">
-                <el-input type="textarea"></el-input>
-              </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-              <el-button @click="centerDialog = false">取 消</el-button>
-              <el-button type="primary" @click="centerDialog = false">保存</el-button>
-            </span>
-          </el-dialog>
-            <el-button @click="del">删除</el-button>
+          <span class="post-opt">
+            <el-button @click="showContent(item.content)">预览</el-button>
+            <el-button @click="modifyDialogShow(item)">编辑</el-button>
+            <el-button @click="delItem(item.id)">删除</el-button>
           </span>
-        </template>
-      </el-table-column>
-    </el-table>
+        </div>
+        <div>
+          <el-table
+            v-loading="listLoading"
+            :data="replyList"
+            element-loading-text="Loading"
+            border
+            fit
+            highlight-current-row
+          >
+            <el-table-column align="center" label="ID" width="95">
+              <template slot-scope="scope">{{ scope.$index }}</template>
+            </el-table-column>
+            <el-table-column label="回复内容">
+              <template slot-scope="scope">{{ scope.row.context }}</template>
+            </el-table-column>
+            <el-table-column align="center" prop="created_at" label="回复时间" width="200">
+              <template slot-scope="scope">
+                <i class="el-icon-time"/>
+                <span>{{ scope.row.gmtCreate }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" prop="created_at" label="回复者" width="150">
+              <template slot-scope="scope">
+                <span>{{ scope.row.userInfo.displayname }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="100" align="center">
+              <template slot-scope="scope">
+                <span>
+                  <el-button @click="delReplyItem(scope.row.id,item.id)">删除</el-button>
+                </span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </el-collapse-item>
+      <!-- </div> -->
+    </el-collapse>
   </div>
 </template>
 
 <script>
-import { getList } from "@/api/post";
+import { getList, add, modify, del } from "@/api/post";
+import { getReplyList, delReply } from "@/api/reply";
+import { quillEditor } from "vue-quill-editor";
 
 export default {
   filters: {
@@ -96,22 +123,55 @@ export default {
   },
   data() {
     return {
+      activeId: null,
       list: null,
+      form: {
+        info: {
+          title: null,
+          content: null
+        }
+      },
+      editorOption: {
+        modules: {
+          toolbar: [
+            ["bold", "italic", "underline", "strike"], // toggled buttons
+            ["blockquote", "code-block"]
+          ]
+        }
+      },
+      replyList: null,
+      content: "",
       listLoading: true,
-      centerDialogVisible: false,
-       centerDialog: false
+      addDialogVisible: false,
+      modifyDialogVisible: false,
+      showDialogVisible: false
     };
   },
   created() {
     this.fetchData();
   },
+  components() {
+    return {
+      editor: Editor
+    };
+  },
   methods: {
     fetchData() {
-      this.listLoading = true;
       getList(this.listQuery).then(response => {
         this.list = response.data;
+      });
+    },
+    listReply(id) {
+      this.listLoading = true;
+      let params = { postId: id };
+      getReplyList(params).then(response => {
+        this.replyList = response.data;
         this.listLoading = false;
       });
+    },
+    showContent(contentMsg) {
+      this.content = contentMsg;
+      this.showDialogVisible = true;
     },
     handleClose(done) {
       this.$confirm("确认关闭？")
@@ -120,16 +180,85 @@ export default {
         })
         .catch(_ => {});
     },
-    del() {
+    addDialogShow() {
+      this.form.info = {
+        content: null,
+        title: null
+      };
+      this.addDialogVisible = true;
+    },
+    modifyDialogShow(item) {
+      this.form.info = {
+        id: item.id,
+        content: item.content,
+        title: item.title
+      };
+      this.modifyDialogVisible = true;
+    },
+    addItem() {
+      let param = {
+        title: this.form.info.title,
+        content: this.form.info.content
+      };
+      add(param).then(response => {
+        this.$message({
+          type: "success",
+          message: "增加成功!"
+        });
+        this.fetchData();
+        this.addDialogVisible = false;
+      });
+    },
+    modifyItem() {
+      let param = {
+        id: this.form.info.id,
+        title: this.form.info.title,
+        content: this.form.info.content
+      };
+      modify(param).then(response => {
+        this.$message({
+          type: "success",
+          message: "修改成功!"
+        });
+        this.fetchData();
+        this.modifyDialogVisible = false;
+      });
+    },
+    delItem(id) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
+          del(id).then(response => {
+            this.$message({
+              type: "success",
+              message: "删除成功!"
+            });
+            this.fetchData();
+          });
+        })
+        .catch(() => {
           this.$message({
-            type: "success",
-            message: "删除成功!"
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    },
+    delReplyItem(id, postId) {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          delReply(id).then(response => {
+            this.$message({
+              type: "success",
+              message: "删除成功!"
+            });
+            this.listReply(postId);
           });
         })
         .catch(() => {
@@ -139,14 +268,27 @@ export default {
           });
         });
     }
+  },
+  watch: {
+    activeId: function(newId, oldId) {
+      let that = this;
+      setTimeout(function() {
+        if (newId !== oldId && newId != null) that.listReply(newId);
+      }, 300);
+    }
   }
 };
 </script>
 
 <style>
 .el-dialog {
-    background: #fff;
-    box-shadow: 0 0px 0px rgba(255, 255, 255, 0.3);
-  
+  background: #fff;
+  box-shadow: 0 0px 0px rgba(255, 255, 255, 0.3);
+}
+span .reply-opt {
+  left: 0%;
+}
+.quill-editor {
+  margin-top: 10dp;
 }
 </style>

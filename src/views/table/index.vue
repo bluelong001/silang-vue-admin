@@ -100,7 +100,7 @@
 
 <script>
 import { getList, del, add, modify } from "@/api/video";
-import { upload } from "@/api/upload";
+import { upload,download } from "@/api/file";
 export default {
   filters: {
     statusFilter(status) {
@@ -226,6 +226,7 @@ export default {
           type: "success",
           message: "上传成功!"
         });
+        this.avatarUrl =download({fileId:this.form.info.fileId});
       });
     }
   }
