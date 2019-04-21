@@ -20,7 +20,8 @@ export function add(params) {
   return request({
     url: '/post',
     method: 'post',
-    params
+    data:params,
+    transformDataRequest :true
   })
 }
 
@@ -28,7 +29,8 @@ export function modify(params) {
   return request({
     url: '/post',
     method: 'put',
-    params
+    data:params,
+    transformDataRequest :true
   })
 }
 

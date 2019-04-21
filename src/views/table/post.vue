@@ -4,7 +4,7 @@
       <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="2">
         <div>
           <el-button @click="addDialogShow">添加主题</el-button>
-          <el-dialog title="预览主题" :visible.sync="showDialogVisible" width="60%" center>
+          <el-dialog title="预览主题" :visible.sync="showDialogVisible" width="80%" center>
             <span>
               <p v-html="content">{{content}}</p>
             </span>
@@ -13,7 +13,7 @@
             </span>
           </el-dialog>
           <!-- modify -->
-          <el-dialog title="提示" :visible.sync="modifyDialogVisible" width="60%" center>
+          <el-dialog title="提示" :visible.sync="modifyDialogVisible" width="80%" center>
             <el-form>
               <el-form-item label="主题标题">
                 <el-input v-model="form.info.title"></el-input>
@@ -22,13 +22,19 @@
 
               <quill-editor ref="myQuillEditor" :options="editorOption" v-model="form.info.content"></quill-editor>
             </el-form>
+            <el-upload
+              class="avatar-uploader"
+              action
+              :http-request="upload"
+              :show-file-list="false"
+            />
             <span slot="footer" class="dialog-footer">
               <el-button @click="modifyDialogVisible = false">取 消</el-button>
               <el-button type="primary" @click="modifyItem">保存</el-button>
             </span>
           </el-dialog>
           <!-- add -->
-          <el-dialog title="提示" :visible.sync="addDialogVisible" width="30%" center>
+          <el-dialog title="提示" :visible.sync="addDialogVisible" width="80%" center>
             <el-form>
               <el-form-item label="主题标题">
                 <el-input v-model="form.info.title"></el-input>
@@ -36,6 +42,12 @@
               <el-form-item label="主题内容"/>
               <quill-editor ref="myQuillEditor" :options="editorOption" v-model="form.info.content"></quill-editor>
             </el-form>
+            <el-upload
+              class="avatar-uploader"
+              action
+              :http-request="upload"
+              :show-file-list="false"
+            />
             <span slot="footer" class="dialog-footer">
               <el-button @click="addDialogVisible = false">取 消</el-button>
               <el-button type="primary" @click="addItem">确 定</el-button>
@@ -59,7 +71,7 @@
           <span slot="left" class="post-date">{{ item.gmtCreate }}</span>
 
           <span class="post-opt">
-            <el-button @click="showContent(item.content)">预览</el-button>
+            <!-- <el-button @click="showContent(item.content)">预览</el-button> -->
             <el-button @click="modifyDialogShow(item)">编辑</el-button>
             <el-button @click="delItem(item.id)">删除</el-button>
           </span>
@@ -108,8 +120,8 @@
 <script>
 import { getList, add, modify, del } from "@/api/post";
 import { getReplyList, delReply } from "@/api/reply";
+import { getUrl, upload } from "@/api/file";
 import { quillEditor } from "vue-quill-editor";
-
 export default {
   filters: {
     statusFilter(status) {
@@ -133,10 +145,26 @@ export default {
       },
       editorOption: {
         modules: {
-          toolbar: [
-            ["bold", "italic", "underline", "strike"], // toggled buttons
-            ["blockquote", "code-block"]
-          ]
+          toolbar: {
+            handlers: {
+              image: function(value) {
+                if (value) {
+                  document.querySelector(".el-upload").click();
+                }
+              }
+            },
+            container: [
+              ["bold", "italic", "underline", "strike"], // toggled buttons
+              ["blockquote"],
+              [{ header: [1, 2, 3, 4, 5, 6, false] }],
+              [{ size: ["small", false, "large", "huge"] }],
+              [{ color: [] }, { background: [] }],
+              [{ font: [] }],
+              [{ align: [] }],
+              ["image"],
+              ["clean"]
+            ]
+          }
         }
       },
       replyList: null,
@@ -156,6 +184,28 @@ export default {
     };
   },
   methods: {
+    upload(param) {
+      let formData = new FormData();
+      formData.append("file", param.file);
+      formData.append("type", "jpg");
+      upload(formData).then(response => {
+        this.$message({
+          type: "success",
+          message: "上传成功!"
+        });
+        let param = { fileId: response.data };
+        getUrl(param).then(response => {
+          let quill = this.$refs.myQuillEditor.quill;
+          // 如果上传成功
+          // 获取光标所在位置
+          let length = quill.getSelection().index;
+          // 插入图片，res为服务器返回的图片链接地址
+          quill.insertEmbed(length, "image", response.data);
+          // 调整光标到最后
+          quill.setSelection(length + 1);
+        });
+      });
+    },
     fetchData() {
       getList(this.listQuery).then(response => {
         this.list = response.data;

@@ -1,13 +1,11 @@
 import request from '@/utils/request'
 
-export function login(username, password) {
+export function login(data) {
   return request({
-    url: '/login',
+    url: '/back/login',
     method: 'post',
-    params: {
-      username:username,
-      password:password
-    }
+    data,
+    transformDataRequest :true
   })
 }
 

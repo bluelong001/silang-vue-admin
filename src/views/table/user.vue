@@ -25,6 +25,12 @@
               <el-form-item label="密码">
                 <el-input v-model="form.info.password"></el-input>
               </el-form-item>
+              <el-form-item label="用户角色">
+                <div>
+                  <el-radio v-model="form.info.role" label="1" border>普通用户</el-radio>
+                  <el-radio v-model="form.info.role" label="2" border>管理员</el-radio>
+                </div>
+              </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
               <el-button @click="addDialogVisible = false">取 消</el-button>
@@ -48,6 +54,12 @@
               </el-form-item>
               <el-form-item label="显示名">
                 <el-input v-model="form.info.displayname"></el-input>
+              </el-form-item>
+              <el-form-item label="用户角色">
+                <div>
+                  <el-radio v-model="form.info.role" label="1" border>普通用户</el-radio>
+                  <el-radio v-model="form.info.role" label="2" border>管理员</el-radio>
+                </div>
               </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -140,16 +152,18 @@ export default {
     addDialogShow() {
       this.form.info = {
         username: null,
-        avatarUrl: null
+        avatarUrl: null,
+        role: "1"
       };
       this.addDialogVisible = true;
     },
     modifyDialogShow(item) {
       this.form.info = {
-        id:item.id,
+        id: item.id,
         username: item.username,
         displayname: item.displayname,
-        avatarUrl: item.headIcon
+        avatarUrl: item.headIcon,
+        role: ""+item.role
       };
       this.modifyDialogVisible = true;
     },
@@ -157,35 +171,37 @@ export default {
       let param = {
         username: this.form.info.username,
         displayname: this.form.info.displayname,
-        password: this.form.info.password
+        password: this.form.info.password,
+        role: this.form.info.role
       };
       if (this.form.info.fileId && this.form.info.fileId.length > 0)
         param.fileId = this.form.info.fileId;
       add(param).then(response => {
-            this.$message({
-              type: "success",
-              message: "增加成功!"
-            });
-            this.fetchData();
-            this.addDialogVisible = false;
-          });
+        this.$message({
+          type: "success",
+          message: "增加成功!"
+        });
+        this.fetchData();
+        this.addDialogVisible = false;
+      });
     },
     modifyItem() {
       let param = {
         id: this.form.info.id,
         username: this.form.info.username,
-        displayname: this.form.info.displayname
+        displayname: this.form.info.displayname,
+        role: this.form.info.role
       };
       if (this.form.info.fileId && this.form.info.fileId.length > 0)
         param.fileId = this.form.info.fileId;
       modify(param).then(response => {
-            this.$message({
-              type: "success",
-              message: "修改成功!"
-            });
-            this.fetchData();
-            this.modifyDialogVisible = false;
-          });
+        this.$message({
+          type: "success",
+          message: "修改成功!"
+        });
+        this.fetchData();
+        this.modifyDialogVisible = false;
+      });
     },
     delItem(id) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
