@@ -8,20 +8,15 @@
           <el-dialog title="提示" :visible.sync="centerDialogVisible" width="30%" center>
             <el-form>
               <el-form-item>
-                <el-upload
-                  class="avatar-uploader"
-                  ref="upload"
-                  action
-                  :http-request="upload"
-                  list-type="picture-card"
-                  :name="upload_name"
-                  :on-remove="handleRemove"
-                  :on-exceed="handleExceed"
-                  :file-list="ad_url_list"
-                  :limit="1"
-                >
-                  <span class="font-14">选择图片或视频</span>
-                  <div slot="tip" class="el-upload__tip">尺寸750*1125px，大小2M以内，视频支持MP4</div>
+              <el-upload
+                class="avatar-uploader"
+                action
+                :http-request="upload"
+                :show-file-list="false"
+                accept="mp4"
+              >
+                <video v-if="avaterUrl" :src="avaterUrl" class="avatar"/>
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
               </el-form-item>
               <el-form-item label="标题">
@@ -100,7 +95,7 @@
 
 <script>
 import { getList, del, add, modify } from "@/api/video";
-import { upload,download } from "@/api/file";
+import { upload,getUrl } from "@/api/file";
 export default {
   filters: {
     statusFilter(status) {
@@ -122,6 +117,7 @@ export default {
           content: null
         }
       },
+      avaterUrl: null,
       listLoading: true,
       centerDialogVisible: false,
       centerDialog: false
@@ -162,6 +158,7 @@ export default {
       });
     },
     addDialog() {
+      this.avaterUrl=null;
       this.form = {
         info: {
           videoName: null,
@@ -193,9 +190,9 @@ export default {
           });
         });
     },
-    updateItem(id) {
+    updateItem() {
       let params = {
-        id,
+        id:this.form.info.id,
         title: this.form.info.title,
         content: this.form.info.content
       };
@@ -226,7 +223,10 @@ export default {
           type: "success",
           message: "上传成功!"
         });
-        this.avatarUrl =download({fileId:this.form.info.fileId});
+        let param = { fileId: this.form.info.fileId };
+        getUrl(param).then(response => {
+          this.avaterUrl = response.data;
+        });
       });
     }
   }
@@ -236,5 +236,28 @@ export default {
 .el-dialog {
   background: #fff;
   box-shadow: 0 0px 0px rgba(255, 255, 255, 0.3);
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
 }
 </style>
