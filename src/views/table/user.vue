@@ -71,19 +71,20 @@
       </el-col>
     </el-row>
     <br>
-    <el-table
+    <el-table stripe
       v-loading="listLoading"
       :data="list"
       element-loading-text="Loading"
-      border
       fit
       highlight-current-row
     >
       <el-table-column align="center" label="ID" width="95">
         <template slot-scope="scope">{{ scope.$index }}</template>
       </el-table-column>
-      <el-table-column label="头像" width="95">
-        <img slot-scope="scope" :src="scope.row.headIcon">
+      <el-table-column label="" width="95">
+        <div class="round-head" slot-scope="scope" >
+          <img :src="scope.row.headIcon" class="img-head">
+        </div>
       </el-table-column>
       <el-table-column label="用户名">
         <template slot-scope="scope">{{ scope.row.username }}</template>
@@ -97,8 +98,8 @@
       <el-table-column label="操作" width="250" align="center">
         <template slot-scope="scope">
           <span>
-            <el-button @click="modifyDialogShow(scope.row)">修改</el-button>
-            <el-button @click="delItem(scope.row.id)">删除</el-button>
+            <el-button @click="modifyDialogShow(scope.row)" type="primary" icon="el-icon-edit" circle></el-button>
+            <el-button @click="delItem(scope.row.id)" type="danger" icon="el-icon-delete" circle></el-button>
           </span>
         </template>
       </el-table-column>
@@ -163,7 +164,7 @@ export default {
         username: item.username,
         displayname: item.displayname,
         avatarUrl: item.headIcon,
-        role: ""+item.role
+        role: "" + item.role
       };
       this.modifyDialogVisible = true;
     },
@@ -272,5 +273,19 @@ export default {
   width: 178px;
   height: 178px;
   display: block;
+}
+.img-head{
+  padding: 10 10 10 10px;
+  width: 70px;
+  height: 70px;
+
+}
+.round-head {
+  width: 74px;
+  height: 74px;
+  float: left;
+  border-radius: 50%;
+  border: 3px solid #eee;
+  overflow: hidden;
 }
 </style>

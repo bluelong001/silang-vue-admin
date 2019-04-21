@@ -19,7 +19,6 @@
                 <el-input v-model="form.info.title"></el-input>
               </el-form-item>
               <el-form-item label="主题内容"/>
-
               <quill-editor ref="myQuillEditor" :options="editorOption" v-model="form.info.content"></quill-editor>
             </el-form>
             <el-upload
@@ -49,8 +48,8 @@
               :show-file-list="false"
             />
             <span slot="footer" class="dialog-footer">
-              <el-button @click="addDialogVisible = false">取 消</el-button>
               <el-button type="primary" @click="addItem">确 定</el-button>
+              <el-button @click="addDialogVisible = false">取 消</el-button>
             </span>
           </el-dialog>
         </div>
@@ -68,12 +67,12 @@
         :key="item.id"
       >
         <div>
-          <span slot="left" class="post-date">{{ item.gmtCreate }}</span>
+          <span slot="left" class="post-date">发表于{{ item.gmtCreate }}</span>
 
           <span class="post-opt">
             <!-- <el-button @click="showContent(item.content)">预览</el-button> -->
             <el-button @click="modifyDialogShow(item)">编辑</el-button>
-            <el-button @click="delItem(item.id)">删除</el-button>
+            <el-button type="danger" @click="delItem(item.id)">删除</el-button>
           </span>
         </div>
         <div>
@@ -81,7 +80,6 @@
             v-loading="listLoading"
             :data="replyList"
             element-loading-text="Loading"
-            border
             fit
             highlight-current-row
           >
@@ -105,7 +103,7 @@
             <el-table-column label="操作" width="100" align="center">
               <template slot-scope="scope">
                 <span>
-                  <el-button @click="delReplyItem(scope.row.id,item.id)">删除</el-button>
+                  <el-button type="danger" icon="el-icon-delete" circle @click="delReplyItem(scope.row.id,item.id)">删除</el-button>
                 </span>
               </template>
             </el-table-column>
@@ -340,5 +338,13 @@ span .reply-opt {
 }
 .quill-editor {
   margin-top: 10dp;
+}
+.post-date{
+  position: relative;
+  left:10px;
+}
+.post-opt{
+  position: relative;
+  right:10px
 }
 </style>

@@ -8,15 +8,15 @@
           <el-dialog title="提示" :visible.sync="centerDialogVisible" width="30%" center>
             <el-form>
               <el-form-item>
-              <el-upload
-                class="avatar-uploader"
-                action
-                :http-request="upload"
-                :show-file-list="false"
-                accept=".mp4"
-              >
-                <video v-if="avaterUrl" :src="avaterUrl" class="avatar"/>
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                <el-upload
+                  class="avatar-uploader"
+                  action
+                  :http-request="upload"
+                  :show-file-list="false"
+                  accept=".mp4"
+                >
+                  <video v-if="avaterUrl" :src="avaterUrl" class="avatar"/>
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
               </el-form-item>
               <el-form-item label="标题">
@@ -27,7 +27,7 @@
               </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-              <el-button @click="addItem">取 消</el-button>
+              <el-button @click="centerDialogVisible=false">取 消</el-button>
               <el-button type="primary" @click="addItem()">确 定</el-button>
             </span>
           </el-dialog>
@@ -39,7 +39,6 @@
       v-loading="listLoading"
       :data="list"
       element-loading-text="Loading"
-      border
       fit
       highlight-current-row
     >
@@ -60,16 +59,22 @@
           <span>{{ scope.row.gmtCreate }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="用户名" width="110" align="center">
+      <el-table-column label=""  align="right" width="85px">
+        <template slot-scope="scope">
+          <div class="round-head">
+            <img :src="scope.row.userInfo.headIcon" class="img-head">     
+          </div>
+        </template>
+      </el-table-column>
+            <el-table-column label="">
         <template slot-scope="scope">
           <span>{{ scope.row.userInfo.displayname }}</span>
-          <img :src="scope.row.userInfo.headIcon" width="40px" height="40px">
         </template>
       </el-table-column>
       <el-table-column label="操作" width="250" align="center">
         <template slot-scope="scope">
           <span>
-            <el-button @click="updateDialog(scope.row)">编辑</el-button>
+            <el-button @click="updateDialog(scope.row)" type="primary" icon="el-icon-edit" circle></el-button>
 
             <el-dialog title="提示" :visible.sync="centerDialog" width="30%" center>
               <el-form>
@@ -85,7 +90,7 @@
                 <el-button type="primary" @click="updateItem(scope.row.id)">保存</el-button>
               </span>
             </el-dialog>
-            <el-button @click="delItem(scope.row.id)">删除</el-button>
+            <el-button @click="delItem(scope.row.id)" type="danger" icon="el-icon-delete" circle></el-button>
           </span>
         </template>
       </el-table-column>
@@ -95,7 +100,7 @@
 
 <script>
 import { getList, del, add, modify } from "@/api/video";
-import { upload,getUrl } from "@/api/file";
+import { upload, getUrl } from "@/api/file";
 export default {
   filters: {
     statusFilter(status) {
@@ -158,7 +163,7 @@ export default {
       });
     },
     addDialog() {
-      this.avaterUrl=null;
+      this.avaterUrl = null;
       this.form = {
         info: {
           videoName: null,
@@ -192,7 +197,7 @@ export default {
     },
     updateItem() {
       let params = {
-        id:this.form.info.id,
+        id: this.form.info.id,
         title: this.form.info.title,
         content: this.form.info.content
       };
@@ -259,5 +264,19 @@ export default {
   width: 178px;
   height: 178px;
   display: block;
+}
+.img-head{
+  padding: 10 10 10 10px;
+  width: 70px;
+  height: 70px;
+
+}
+.round-head {
+  width: 74px;
+  height: 74px;
+  float: left;
+  border-radius: 50%;
+  border: 3px solid #eee;
+  overflow: hidden;
 }
 </style>
