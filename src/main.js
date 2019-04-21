@@ -20,7 +20,9 @@ import  VueQuillEditor from 'vue-quill-editor'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
-
+import ECharts from 'vue-echarts/components/ECharts'
+import 'echarts'
+Vue.component('chart', ECharts)
 Vue.use(Qs)
 Vue.use(VueQuillEditor)
 /**

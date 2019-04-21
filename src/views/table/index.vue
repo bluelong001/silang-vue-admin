@@ -13,7 +13,7 @@
                 action
                 :http-request="upload"
                 :show-file-list="false"
-                accept="mp4"
+                accept=".mp4"
               >
                 <video v-if="avaterUrl" :src="avaterUrl" class="avatar"/>
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
