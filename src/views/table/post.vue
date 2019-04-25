@@ -67,15 +67,24 @@
         :key="item.id"
       >
         <div>
-          <span slot="left" class="post-date">发表于{{ item.gmtCreate }}</span>
-
-          <span class="post-opt">
+        <el-row type="flex" justify="space-between">
+          <el-col :span="6">
+  <span class="post-date">发表于{{ item.gmtCreate }}</span>
+          </el-col>
+          <el-col :span="6">
+             <span class="post-opt">
             <!-- <el-button @click="showContent(item.content)">预览</el-button> -->
             <el-button @click="modifyDialogShow(item)">编辑</el-button>
             <el-button type="danger" @click="delItem(item.id)">删除</el-button>
           </span>
-        </div>
-        <div>
+          </el-col>
+
+
+         
+        </el-row>
+          
+        
+
           <el-table
             v-loading="listLoading"
             :data="replyList"
@@ -103,7 +112,12 @@
             <el-table-column label="操作" width="100" align="center">
               <template slot-scope="scope">
                 <span>
-                  <el-button type="danger" icon="el-icon-delete" circle @click="delReplyItem(scope.row.id,item.id)">删除</el-button>
+                  <el-button
+                    type="danger"
+                    icon="el-icon-delete"
+                    circle
+                    @click="delReplyItem(scope.row.id,item.id)"
+                  >删除</el-button>
                 </span>
               </template>
             </el-table-column>
@@ -339,12 +353,14 @@ span .reply-opt {
 .quill-editor {
   margin-top: 10dp;
 }
-.post-date{
-  position: relative;
-  left:10px;
+/* 日历 */
+.post-date {
+  /* position: relative;
+  left: 10px; */
 }
-.post-opt{
-  position: relative;
-  right:10px
+/* 操作条 */
+.post-opt {
+  /* position: relative;
+  right: 10px; */
 }
 </style>
