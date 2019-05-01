@@ -25,6 +25,20 @@
               <el-form-item label="介绍">
                 <el-input type="textarea" v-model="form.info.content"></el-input>
               </el-form-item>
+              <el-form-item prop="picList">
+                <el-upload
+                  action
+                  :http-request="uploadImg"
+                  list-type="picture-card"
+                  :on-preview="handlePictureCardPreview"
+                  :on-remove="handleRemove"
+                >
+                  <i class="el-icon-plus"></i>
+                </el-upload>
+                <el-dialog :visible.sync="dialogVisible">
+                  <img width="100%" :src="dialogImageUrl" alt>
+                </el-dialog>
+              </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
               <el-button @click="centerDialogVisible=false">取 消</el-button>
@@ -43,7 +57,7 @@
       highlight-current-row
     >
       <el-table-column align="center" label="ID" width="95">
-        <template slot-scope="scope">{{ scope.$index }}</template>
+        <template slot-scope="scope">{{ scope.row.id }}</template>
       </el-table-column>
       <el-table-column align="center" label="视频" width="95">
         <template slot-scope="scope">
@@ -59,14 +73,14 @@
           <span>{{ scope.row.gmtCreate }}</span>
         </template>
       </el-table-column>
-      <el-table-column label=""  align="right" width="85px">
+      <el-table-column label align="right" width="85px">
         <template slot-scope="scope">
           <div class="round-head">
-            <img :src="scope.row.userInfo.headIcon" class="img-head">     
+            <img :src="scope.row.userInfo.headIcon" class="img-head">
           </div>
         </template>
       </el-table-column>
-            <el-table-column label="">
+      <el-table-column label>
         <template slot-scope="scope">
           <span>{{ scope.row.userInfo.displayname }}</span>
         </template>
@@ -114,7 +128,12 @@ export default {
   },
   data() {
     return {
+      dialogImageUrl: "",
+      dialogVisible: false,
+      fileIdList: [],
       list: null,
+      imgList: [],
+      imgUrlList: [],
       form: {
         info: {
           videoName: null,
@@ -132,6 +151,24 @@ export default {
     this.fetchData();
   },
   methods: {
+    handleRemove(file, fileList) {
+      console.log(file);
+      let list1 = [];
+      let list2=[];
+      this.imgList.forEach(img => {
+        if (img.file != file.uid) {list1.push(img.url);
+        list2.push(img)
+        }
+      });
+      this.imgList=list2;
+      this.imgUrlList = list1;
+      console.log(fileList);
+      console.log(file);
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
     fetchData() {
       this.listLoading = true;
       getList(this.listQuery).then(response => {
@@ -149,6 +186,7 @@ export default {
     addItem() {
       let params = {
         title: this.form.info.title,
+        imgList:JSON.stringify(this.imgUrlList),
         content: this.form.info.content,
         videoName: this.form.info.title,
         fileId: this.form.info.fileId
@@ -233,6 +271,24 @@ export default {
           this.avaterUrl = response.data;
         });
       });
+    },
+    uploadImg(param) {
+      let file=param.file;
+      let formData = new FormData();
+      formData.append("file", param.file);
+      formData.append("type", "jpg");
+      upload(formData).then(response => {
+        this.form.info.fileId = response.data;
+        this.$message({
+          type: "success",
+          message: "上传成功!"
+        });
+        let param = { fileId: this.form.info.fileId };
+        getUrl(param).then(response => {
+          this.imgList.push({ url: response.data, file: file.uid });
+          this.imgUrlList.push(response.data);
+        });
+      });
     }
   }
 };
@@ -265,11 +321,10 @@ export default {
   height: 178px;
   display: block;
 }
-.img-head{
+.img-head {
   padding: 10 10 10 10px;
   width: 70px;
   height: 70px;
-
 }
 .round-head {
   width: 74px;

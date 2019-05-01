@@ -88,7 +88,18 @@ export const constantRouterMap = [
       }
     ]
   },
-
+  {
+    path: '/message',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Message',
+        component: () => import('@/views/table/message'),
+        meta: { title: '消息管理', icon: 'form' }
+      }
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 
