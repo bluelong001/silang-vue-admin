@@ -8,7 +8,7 @@
           <el-dialog title="增加消息" :visible.sync="addDialogVisible" width="30%" center>
             <el-form>
               <el-form-item label="消息">
-                <el-input v-model="form.info.msg"></el-input>
+                <el-input v-model="form.info.message"></el-input>
               </el-form-item>
 
               <el-form-item label="是否推送">

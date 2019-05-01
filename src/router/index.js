@@ -102,12 +102,17 @@ export const constantRouterMap = [
     children: [
       {
         path: 'druid', 
-        component: () => import('@/views/table/druid'),
+        component: () => import('@/views/external/druid'),
         meta: { title: '数据库监控' ,icon:'link'}
       },
       {
+        path: 'swagger', 
+        component: () => import('@/views/external/swaggerui'),
+        meta: { title: '服务端接口' ,icon:'link'}
+      },
+      {
         path: 'baidu', 
-        component: () => import('@/views/table/baidu'),
+        component: () => import('@/views/external/baidu'),
         meta: { title: '我是充数的' ,icon:'link'}
       }
     ]

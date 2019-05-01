@@ -22,6 +22,9 @@
               <el-form-item label="显示名">
                 <el-input v-model="form.info.displayname"></el-input>
               </el-form-item>
+                            <el-form-item label="签名">
+                <el-input v-model="form.info.signature"></el-input>
+              </el-form-item>
               <el-form-item label="密码">
                 <el-input v-model="form.info.password"></el-input>
               </el-form-item>
@@ -54,6 +57,9 @@
               </el-form-item>
               <el-form-item label="显示名">
                 <el-input v-model="form.info.displayname"></el-input>
+              </el-form-item>
+                                     <el-form-item label="签名">
+                <el-input v-model="form.info.signature"></el-input>
               </el-form-item>
               <el-form-item label="用户角色">
                 <div>
@@ -91,6 +97,9 @@
       </el-table-column>
       <el-table-column label="显示名">
         <template slot-scope="scope">{{ scope.row.displayname }}</template>
+      </el-table-column>
+            <el-table-column label="个性签名">
+        <template slot-scope="scope">{{ scope.row.signature }}</template>
       </el-table-column>
       <el-table-column label="角色">
         <template slot-scope="scope">{{ scope.row.role==1?"普通用户":"管理员" }}</template>
@@ -154,6 +163,7 @@ export default {
       this.form.info = {
         username: null,
         avatarUrl: null,
+        signature: "这个人很懒，什么都没留下来",
         role: "1"
       };
       this.addDialogVisible = true;
@@ -164,6 +174,7 @@ export default {
         username: item.username,
         displayname: item.displayname,
         avatarUrl: item.headIcon,
+        signature:item.signature,
         role: "" + item.role
       };
       this.modifyDialogVisible = true;
@@ -173,6 +184,7 @@ export default {
         username: this.form.info.username,
         displayname: this.form.info.displayname,
         password: this.form.info.password,
+        signature: this.form.info.signature,
         role: this.form.info.role
       };
       if (this.form.info.fileId && this.form.info.fileId.length > 0)
@@ -191,6 +203,7 @@ export default {
         id: this.form.info.id,
         username: this.form.info.username,
         displayname: this.form.info.displayname,
+                signature: this.form.info.signature,
         role: this.form.info.role
       };
       if (this.form.info.fileId && this.form.info.fileId.length > 0)
