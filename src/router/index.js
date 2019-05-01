@@ -39,14 +39,11 @@ export const constantRouterMap = [
   },
 
   {
-    path: '/example',
+    path: '/video',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: '视频管理中心', icon: 'example' },
     children: [
       {
-        path: 'table',
+        path: 'index',
         name: 'Table',
         component: () => import('@/views/table/index'),
         meta: { title: '视频管理', icon: 'table' }
@@ -54,20 +51,14 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/nested',
+    path: '/post',
     component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: '主题管理中心',
-      icon: 'nested'
-    },
     children: [
       {
-        path: 'menu1',
+        path: 'index',
         component: () => import('@/views/table/post'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: '主题管理' }
+        name: 'Post',
+        meta: { title: '主题管理',icon: 'nested' }
       }
       // {
       //   path: 'menu2',
@@ -77,14 +68,14 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/form',
+    path: '/user',
     component: Layout,
     children: [
       {
         path: 'index',
-        name: 'Form',
+        name: 'User',
         component: () => import('@/views/table/user'),
-        meta: { title: '用户管理', icon: 'form' }
+        meta: { title: '用户管理', icon: 'user' }
       }
     ]
   },
@@ -97,6 +88,27 @@ export const constantRouterMap = [
         name: 'Message',
         component: () => import('@/views/table/message'),
         meta: { title: '消息管理', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/external-link',
+    component: Layout,
+    name: 'System',
+    meta: {
+      title: '系统管理',
+      icon: 'example'
+    },
+    children: [
+      {
+        path: 'druid', 
+        component: () => import('@/views/table/druid'),
+        meta: { title: '数据库监控' ,icon:'link'}
+      },
+      {
+        path: 'baidu', 
+        component: () => import('@/views/table/baidu'),
+        meta: { title: '我是充数的' ,icon:'link'}
       }
     ]
   },

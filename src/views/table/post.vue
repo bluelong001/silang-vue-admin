@@ -117,7 +117,7 @@
                     icon="el-icon-delete"
                     circle
                     @click="delReplyItem(scope.row.id,item.id)"
-                  >删除</el-button>
+                  ></el-button>
                 </span>
               </template>
             </el-table-column>
