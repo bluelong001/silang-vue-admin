@@ -3,7 +3,7 @@
     <el-row type="flex" justify="end">
       <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="2">
         <div>
-          <el-button @click="addDialogShow">添加用户</el-button>
+          <el-button @click="addDialogShow">添加消息</el-button>
 
           <el-dialog title="增加消息" :visible.sync="addDialogVisible" width="30%" center>
             <el-form>

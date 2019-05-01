@@ -1,6 +1,6 @@
 <template>
 <div  >
-    <iframe src='http://192.168.199.225:8080/swagger-ui.html'  frameborder=0 name="showHere" scrolling=auto id="show-iframe" />
+    <iframe src='http://www.dream-focus.cn:8080/swagger-ui.html'  frameborder=0 name="showHere" scrolling=auto id="show-iframe" />
     </div>
 </template>
 <script>
