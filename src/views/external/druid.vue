@@ -1,6 +1,6 @@
 <template>
 <div  >
-    <iframe src='http://www.dream-focus.cn:8080/druid/index.html'  frameborder=0 name="showHere" scrolling=auto id="show-iframe" />
+    <iframe src='http://wjb666.top:8085/druid/index.html'  frameborder=0 name="showHere" scrolling=auto id="show-iframe" />
     </div>
 </template>
 <script>
