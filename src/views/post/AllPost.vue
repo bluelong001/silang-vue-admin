@@ -3,7 +3,7 @@
     <el-row type="flex" justify="end">
       <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="2">
         <div>
-          <el-button @click="addDialogShow">添加主题</el-button>
+          <!-- <el-button @click="addDialogShow">添加主题</el-button> -->
           <el-dialog title="预览主题" :visible.sync="showDialogVisible" width="80%" center>
             <span>
               <p v-html="content">{{content}}</p>
@@ -33,7 +33,7 @@
             </span>
           </el-dialog>
           <!-- add -->
-          <el-dialog title="提示" :visible.sync="addDialogVisible" width="80%" center>
+          <!-- <el-dialog title="提示" :visible.sync="addDialogVisible" width="80%" center>
             <el-form>
               <el-form-item label="主题标题">
                 <el-input v-model="form.info.title"></el-input>
@@ -51,7 +51,7 @@
               <el-button type="primary" @click="addItem">确 定</el-button>
               <el-button @click="addDialogVisible = false">取 消</el-button>
             </span>
-          </el-dialog>
+          </el-dialog> -->
         </div>
       </el-col>
     </el-row>
@@ -242,13 +242,13 @@ export default {
         })
         .catch(_ => {});
     },
-    addDialogShow() {
-      this.form.info = {
-        content: null,
-        title: null
-      };
-      this.addDialogVisible = true;
-    },
+    // addDialogShow() {
+    //   this.form.info = {
+    //     content: null,
+    //     title: null
+    //   };
+    //   this.addDialogVisible = true;
+    // },
     modifyDialogShow(item) {
       this.form.info = {
         id: item.id,
@@ -257,20 +257,20 @@ export default {
       };
       this.modifyDialogVisible = true;
     },
-    addItem() {
-      let param = {
-        title: this.form.info.title,
-        content: this.form.info.content
-      };
-      add(param).then(response => {
-        this.$message({
-          type: "success",
-          message: "增加成功!"
-        });
-        this.fetchData();
-        this.addDialogVisible = false;
-      });
-    },
+    // addItem() {
+    //   let param = {
+    //     title: this.form.info.title,
+    //     content: this.form.info.content
+    //   };
+    //   add(param).then(response => {
+    //     this.$message({
+    //       type: "success",
+    //       message: "增加成功!"
+    //     });
+    //     this.fetchData();
+    //     this.addDialogVisible = false;
+    //   });
+    // },
     modifyItem() {
       let param = {
         id: this.form.info.id,

@@ -23,7 +23,6 @@
               <el-button type="primary" @click="addItem()">确 定</el-button>
             </span>
           </el-dialog>
-
         </div>
       </el-col>
     </el-row>

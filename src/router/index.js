@@ -41,30 +41,39 @@ export const constantRouterMap = [
   {
     path: '/video',
     component: Layout,
+    meta: { title: '视频管理', icon: 'table' },
     children: [
       {
         path: 'index',
         name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: '视频管理', icon: 'table' }
+        component: () => import('@/views/video/AllVideo'),
+        meta: { title: '视频列表', icon: 'table' }
+      },
+      {
+        path: 'add',
+        component: () => import('@/views/video/NewVideo'),
+        name: 'NewPost',
+        meta: { title: '发表视频',icon: 'nested'}
       }
     ]
   },
   {
     path: '/post',
     component: Layout,
+    meta: { title: '主题管理',icon: 'nested' },
     children: [
       {
         path: 'index',
-        component: () => import('@/views/table/post'), // Parent router-view
-        name: 'Post',
-        meta: { title: '主题管理',icon: 'nested' }
+        component: () => import('@/views/post/AllPost'), // Parent router-view
+        name: 'AllPost',
+        meta: { title: '主题列表',icon: 'nested' }
+      },
+      {
+        path: 'add',
+        component: () => import('@/views/post/NewPost'),
+        name: 'NewPost',
+        meta: { title: '发表主题',icon: 'nested'}
       }
-      // {
-      //   path: 'menu2',
-      //   component: () => import('@/views/table/reply'),
-      //   meta: { title: '回复管理' }
-      // }
     ]
   },
   {
@@ -74,7 +83,7 @@ export const constantRouterMap = [
       {
         path: 'index',
         name: 'User',
-        component: () => import('@/views/table/user'),
+        component: () => import('@/views/user/user'),
         meta: { title: '用户管理', icon: 'user' }
       }
     ]
@@ -86,7 +95,7 @@ export const constantRouterMap = [
       {
         path: 'index',
         name: 'Message',
-        component: () => import('@/views/table/message'),
+        component: () => import('@/views/message/message'),
         meta: { title: '消息管理', icon: 'form' }
       }
     ]

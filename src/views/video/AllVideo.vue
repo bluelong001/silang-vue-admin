@@ -3,9 +3,22 @@
     <el-row type="flex" justify="end">
       <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="2">
         <div>
-          <el-button @click="addDialog">添加视频</el-button>
-
-          <el-dialog title="提示" :visible.sync="centerDialogVisible" width="30%" center>
+          <!-- <el-button @click="addDialog">添加视频</el-button> -->
+            <el-dialog title="提示" :visible.sync="centerDialog" width="30%" center>
+              <el-form>
+                <el-form-item label="标题">
+                  <el-input v-model="form.info.title"></el-input>
+                </el-form-item>
+                <el-form-item label="介绍">
+                  <el-input type="textarea" v-model="form.info.content"></el-input>
+                </el-form-item>
+              </el-form>
+              <span slot="footer" class="dialog-footer">
+                <el-button @click="centerDialog = false">取 消</el-button>
+                <el-button type="primary" @click="updateItem(scope.row.id)">保存</el-button>
+              </span>
+            </el-dialog>
+          <!-- <el-dialog title="提示" :visible.sync="centerDialogVisible" width="30%" center>
             <el-form>
               <el-form-item>
                 <el-upload
@@ -44,7 +57,7 @@
               <el-button @click="centerDialogVisible=false">取 消</el-button>
               <el-button type="primary" @click="addItem()">确 定</el-button>
             </span>
-          </el-dialog>
+          </el-dialog> -->
         </div>
       </el-col>
     </el-row>
@@ -90,20 +103,7 @@
           <span>
             <el-button @click="updateDialog(scope.row)" type="primary" icon="el-icon-edit" circle></el-button>
 
-            <el-dialog title="提示" :visible.sync="centerDialog" width="30%" center>
-              <el-form>
-                <el-form-item label="标题">
-                  <el-input v-model="form.info.title"></el-input>
-                </el-form-item>
-                <el-form-item label="介绍">
-                  <el-input type="textarea" v-model="form.info.content"></el-input>
-                </el-form-item>
-              </el-form>
-              <span slot="footer" class="dialog-footer">
-                <el-button @click="centerDialog = false">取 消</el-button>
-                <el-button type="primary" @click="updateItem(scope.row.id)">保存</el-button>
-              </span>
-            </el-dialog>
+
             <el-button @click="delItem(scope.row.id)" type="danger" icon="el-icon-delete" circle></el-button>
           </span>
         </template>
@@ -113,7 +113,7 @@
 </template>
 
 <script>
-import { getList, del, add, modify } from "@/api/video";
+import { getList, del,  modify } from "@/api/video";
 import { upload, getUrl } from "@/api/file";
 export default {
   filters: {
@@ -151,24 +151,7 @@ export default {
     this.fetchData();
   },
   methods: {
-    handleRemove(file, fileList) {
-      console.log(file);
-      let list1 = [];
-      let list2=[];
-      this.imgList.forEach(img => {
-        if (img.file != file.uid) {list1.push(img.url);
-        list2.push(img)
-        }
-      });
-      this.imgList=list2;
-      this.imgUrlList = list1;
-      console.log(fileList);
-      console.log(file);
-    },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    },
+
     fetchData() {
       this.listLoading = true;
       getList(this.listQuery).then(response => {
@@ -183,34 +166,34 @@ export default {
         })
         .catch(_ => {});
     },
-    addItem() {
-      let params = {
-        title: this.form.info.title,
-        imgList:JSON.stringify(this.imgUrlList),
-        content: this.form.info.content,
-        videoName: this.form.info.title,
-        fileId: this.form.info.fileId
-      };
-      add(params).then(resopnse => {
-        this.centerDialogVisible = false;
-        this.$message({
-          type: "success",
-          message: "增加成功!"
-        });
-        this.fetchData();
-      });
-    },
-    addDialog() {
-      this.avaterUrl = null;
-      this.form = {
-        info: {
-          videoName: null,
-          title: null,
-          content: null
-        }
-      };
-      this.centerDialogVisible = true;
-    },
+    // addItem() {
+    //   let params = {
+    //     title: this.form.info.title,
+    //     imgList:JSON.stringify(this.imgUrlList),
+    //     content: this.form.info.content,
+    //     videoName: this.form.info.title,
+    //     fileId: this.form.info.fileId
+    //   };
+    //   add(params).then(resopnse => {
+    //     this.centerDialogVisible = false;
+    //     this.$message({
+    //       type: "success",
+    //       message: "增加成功!"
+    //     });
+    //     this.fetchData();
+    //   });
+    // },
+    // addDialog() {
+    //   this.avaterUrl = null;
+    //   this.form = {
+    //     info: {
+    //       videoName: null,
+    //       title: null,
+    //       content: null
+    //     }
+    //   };
+    //   this.centerDialogVisible = true;
+    // },
     delItem(id) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
