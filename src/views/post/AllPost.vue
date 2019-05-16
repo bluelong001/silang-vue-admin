@@ -29,7 +29,7 @@
             />
             <span slot="footer" class="dialog-footer">
               <el-button @click="modifyDialogVisible = false">取 消</el-button>
-              <el-button type="primary" @click="modifyItem">保存</el-button>
+              <el-button type="primary" @click="modifyItem">保 存</el-button>
             </span>
           </el-dialog>
           <!-- add -->

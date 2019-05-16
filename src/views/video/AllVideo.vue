@@ -4,20 +4,7 @@
       <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="2">
         <div>
           <!-- <el-button @click="addDialog">添加视频</el-button> -->
-            <el-dialog title="提示" :visible.sync="centerDialog" width="30%" center>
-              <el-form>
-                <el-form-item label="标题">
-                  <el-input v-model="form.info.title"></el-input>
-                </el-form-item>
-                <el-form-item label="介绍">
-                  <el-input type="textarea" v-model="form.info.content"></el-input>
-                </el-form-item>
-              </el-form>
-              <span slot="footer" class="dialog-footer">
-                <el-button @click="centerDialog = false">取 消</el-button>
-                <el-button type="primary" @click="updateItem(scope.row.id)">保存</el-button>
-              </span>
-            </el-dialog>
+
           <!-- <el-dialog title="提示" :visible.sync="centerDialogVisible" width="30%" center>
             <el-form>
               <el-form-item>
@@ -103,7 +90,20 @@
           <span>
             <el-button @click="updateDialog(scope.row)" type="primary" icon="el-icon-edit" circle></el-button>
 
-
+            <el-dialog title="提示" :visible.sync="centerDialog" width="30%" center>
+              <el-form>
+                <el-form-item label="标题">
+                  <el-input v-model="form.info.title"></el-input>
+                </el-form-item>
+                <el-form-item label="介绍">
+                  <el-input type="textarea" v-model="form.info.content"></el-input>
+                </el-form-item>
+              </el-form>
+              <span slot="footer" class="dialog-footer">
+                <el-button @click="centerDialog = false">取 消</el-button>
+                <el-button type="primary" @click="updateItem(scope.row.id)">保存</el-button>
+              </span>
+            </el-dialog>
             <el-button @click="delItem(scope.row.id)" type="danger" icon="el-icon-delete" circle></el-button>
           </span>
         </template>
