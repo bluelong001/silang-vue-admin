@@ -44,7 +44,7 @@
               <el-button @click="centerDialogVisible=false">取 消</el-button>
               <el-button type="primary" @click="addItem()">确 定</el-button>
             </span>
-          </el-dialog> -->
+          </el-dialog>-->
         </div>
       </el-col>
     </el-row>
@@ -109,11 +109,21 @@
         </template>
       </el-table-column>
     </el-table>
+    <br>
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="listQuery.page"
+      :page-sizes="[5,10,20,40]"
+      :page-size="5"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+    ></el-pagination>
   </div>
 </template>
 
 <script>
-import { getList, del,  modify } from "@/api/video";
+import { getList, del, modify } from "@/api/video";
 import { upload, getUrl } from "@/api/file";
 export default {
   filters: {
@@ -141,6 +151,11 @@ export default {
           content: null
         }
       },
+      total:0,
+      listQuery: {
+        pageSize: 5,
+        page: 1
+      },
       avaterUrl: null,
       listLoading: true,
       centerDialogVisible: false,
@@ -151,11 +166,13 @@ export default {
     this.fetchData();
   },
   methods: {
-
     fetchData() {
       this.listLoading = true;
+      console.log(this.listQuery);
+      
       getList(this.listQuery).then(response => {
         this.list = response.data;
+        this.total = response.total;
         this.listLoading = false;
       });
     },
@@ -165,6 +182,14 @@ export default {
           done();
         })
         .catch(_ => {});
+    },
+    handleSizeChange(val) {
+      this.listQuery.pageSize = val;
+      this.fetchData();
+    },
+    handleCurrentChange(val) {
+      this.listQuery.page = val;
+      this.fetchData();
     },
     // addItem() {
     //   let params = {
@@ -256,7 +281,7 @@ export default {
       });
     },
     uploadImg(param) {
-      let file=param.file;
+      let file = param.file;
       let formData = new FormData();
       formData.append("file", param.file);
       formData.append("type", "jpg");

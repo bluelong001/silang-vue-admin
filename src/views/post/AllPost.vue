@@ -51,7 +51,7 @@
               <el-button type="primary" @click="addItem">确 定</el-button>
               <el-button @click="addDialogVisible = false">取 消</el-button>
             </span>
-          </el-dialog> -->
+          </el-dialog>-->
         </div>
       </el-col>
     </el-row>
@@ -67,23 +67,18 @@
         :key="item.id"
       >
         <div>
-        <el-row type="flex" justify="space-between">
-          <el-col :span="6">
-  <span class="post-date">发表于{{ item.gmtCreate }}</span>
-          </el-col>
-          <el-col :span="6">
-             <span class="post-opt">
-            <!-- <el-button @click="showContent(item.content)">预览</el-button> -->
-            <el-button @click="modifyDialogShow(item)">编辑</el-button>
-            <el-button type="danger" @click="delItem(item.id)">删除</el-button>
-          </span>
-          </el-col>
-
-
-         
-        </el-row>
-          
-        
+          <el-row type="flex" justify="space-between">
+            <el-col :span="6">
+              <span class="post-date">发表于{{ item.gmtCreate }}</span>
+            </el-col>
+            <el-col :span="6">
+              <span class="post-opt">
+                <!-- <el-button @click="showContent(item.content)">预览</el-button> -->
+                <el-button @click="modifyDialogShow(item)">编辑</el-button>
+                <el-button type="danger" @click="delItem(item.id)">删除</el-button>
+              </span>
+            </el-col>
+          </el-row>
 
           <el-table
             v-loading="listLoading"
@@ -122,10 +117,28 @@
               </template>
             </el-table-column>
           </el-table>
+          <el-pagination
+            @size-change="ReplyHandleSizeChange"
+            @current-change="ReplyHandleCurrentChange"
+            :current-page="listReplyQuery.page"
+            :page-sizes="[5,10,20,40]"
+            :page-size="5"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="replyTotal"
+          ></el-pagination>
         </div>
       </el-collapse-item>
       <!-- </div> -->
     </el-collapse>
+    <el-pagination
+      @size-change="PostHandleSizeChange"
+      @current-change="PostHandleCurrentChange"
+      :current-page="listPostQuery.page"
+      :page-sizes="[5,10,20,40]"
+      :page-size="5"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="postTotal"
+    ></el-pagination>
   </div>
 </template>
 
@@ -179,6 +192,16 @@ export default {
           }
         }
       },
+      listPostQuery: {
+        pageSize: 5,
+        page: 1
+      },
+      postTotal: 0,
+      replyTotal: 0,
+      listReplyQuery: {
+        pageSize: 5,
+        page: 1
+      },
       replyList: null,
       content: "",
       listLoading: true,
@@ -221,6 +244,7 @@ export default {
     fetchData() {
       getList(this.listQuery).then(response => {
         this.list = response.data;
+        this.postTotal = response.total;
       });
     },
     listReply(id) {
@@ -229,6 +253,7 @@ export default {
       getReplyList(params).then(response => {
         this.replyList = response.data;
         this.listLoading = false;
+        this.replyTotal = response.total;
       });
     },
     showContent(contentMsg) {
@@ -307,6 +332,22 @@ export default {
             message: "已取消删除"
           });
         });
+    },
+    postHandleSizeChange(val) {
+      this.listPostQuery.pageSize = val;
+      this.fetchData();
+    },
+    postHandleCurrentChange(val) {
+      this.listPostQuery.page = val;
+      this.fetchData();
+    },
+    replyHandleSizeChange(val) {
+      this.listReplyQuery.pageSize = val;
+      this.listReply();
+    },
+    replyHandleCurrentChange(val) {
+      this.listReplyQuery.page = val;
+      this.listReply();
     },
     delReplyItem(id, postId) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
