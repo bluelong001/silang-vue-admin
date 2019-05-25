@@ -117,7 +117,7 @@
               </template>
             </el-table-column>
           </el-table>
-          <el-pagination
+          <!-- <el-pagination
             @size-change="ReplyHandleSizeChange"
             @current-change="ReplyHandleCurrentChange"
             :current-page="listReplyQuery.page"
@@ -125,20 +125,23 @@
             :page-size="5"
             layout="total, sizes, prev, pager, next, jumper"
             :total="replyTotal"
-          ></el-pagination>
+          ></el-pagination>-->
         </div>
       </el-collapse-item>
       <!-- </div> -->
     </el-collapse>
-    <el-pagination
-      @size-change="PostHandleSizeChange"
-      @current-change="PostHandleCurrentChange"
-      :current-page="listPostQuery.page"
-      :page-sizes="[5,10,20,40]"
-      :page-size="5"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="postTotal"
-    ></el-pagination>
+    <br>
+    <el-row type="flex" class="row-bg" justify="center">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="listPostQuery.page"
+        :page-sizes="[5,10,20,40]"
+        :page-size="5"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="postTotal"
+      ></el-pagination>
+    </el-row>
   </div>
 </template>
 
@@ -219,6 +222,14 @@ export default {
     };
   },
   methods: {
+    handleSizeChange(val) {
+      this.listPostQuery.pageSize = val;
+      this.fetchData();
+    },
+    handleCurrentChange(val) {
+      this.listPostQuery.page = val;
+      this.fetchData();
+    },
     upload(param) {
       let formData = new FormData();
       formData.append("file", param.file);
@@ -242,7 +253,7 @@ export default {
       });
     },
     fetchData() {
-      getList(this.listQuery).then(response => {
+      getList(this.listPostQuery).then(response => {
         this.list = response.data;
         this.postTotal = response.total;
       });
@@ -333,22 +344,14 @@ export default {
           });
         });
     },
-    postHandleSizeChange(val) {
-      this.listPostQuery.pageSize = val;
-      this.fetchData();
-    },
-    postHandleCurrentChange(val) {
-      this.listPostQuery.page = val;
-      this.fetchData();
-    },
-    replyHandleSizeChange(val) {
-      this.listReplyQuery.pageSize = val;
-      this.listReply();
-    },
-    replyHandleCurrentChange(val) {
-      this.listReplyQuery.page = val;
-      this.listReply();
-    },
+    // replyHandleSizeChange(val) {
+    //   this.listReplyQuery.pageSize = val;
+    //   this.listReply();
+    // },
+    // replyHandleCurrentChange(val) {
+    //   this.listReplyQuery.page = val;
+    //   this.listReply();
+    // },
     delReplyItem(id, postId) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",

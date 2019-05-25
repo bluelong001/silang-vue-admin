@@ -110,6 +110,7 @@
       </el-table-column>
     </el-table>
     <br>
+    <el-row type="flex" class="row-bg" justify="center">
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
@@ -119,6 +120,7 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
     ></el-pagination>
+    </el-row>
   </div>
 </template>
 
